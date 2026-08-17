@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2457e6">
+<title>TestPro</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:#172033;background:#f5f7fb}
+*{box-sizing:border-box}body{margin:0}button,select{font:inherit}.app{max-width:700px;margin:auto;min-height:100vh}
+header{padding:18px 18px 12px;background:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid #e8ebf2}
+.brand{font-size:25px;font-weight:900}.brand span{color:#2457e6}
+main{padding:18px}.hero{background:#2457e6;color:#fff;border-radius:24px;padding:24px;margin-bottom:16px}.hero h1{font-size:27px;margin:0 0 8px}.hero p{margin:0;opacity:.9}
+.card{background:#fff;border:1px solid #e4e8f0;border-radius:18px;padding:18px;margin-bottom:12px;box-shadow:0 3px 12px #17203308}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tile{cursor:pointer;min-height:125px}.tile .icon{font-size:30px}.tile h3{margin:8px 0 4px}.muted{color:#70798a}
+label{font-weight:700;display:block;margin-bottom:8px}select{width:100%;padding:13px;border:1px solid #d8deea;border-radius:12px;background:#fff;margin-bottom:16px}
+.btn{width:100%;padding:14px;border:0;border-radius:13px;background:#2457e6;color:#fff;font-weight:800;cursor:pointer}.secondary{background:#eef2ff;color:#2457e6}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.timer{background:#fff1f1;color:#d63636;padding:8px 11px;border-radius:10px;font-weight:900}.bar{height:7px;background:#e8ecf4;border-radius:9px;overflow:hidden;margin-bottom:18px}.fill{height:100%;background:#2457e6}
+.q{font-size:21px;line-height:1.35;margin:0 0 18px}.ans{display:grid;gap:10px}.ans button{padding:15px;text-align:left;background:#fff;border:1.5px solid #dce2ec;border-radius:13px;cursor:pointer}.ans button.sel{border-color:#2457e6;background:#eef3ff}.nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.nav .btn{width:auto}
+.result{text-align:center}.score{font-size:54px;font-weight:900;color:#2457e6}.hidden{display:none!important}
+.badge{display:inline-block;background:#eef2ff;color:#2457e6;padding:7px 10px;border-radius:9px;font-weight:800;font-size:13px}
+.review{margin-top:12px}.review button{width:100%;text-align:left;border:0;background:#f8f9fc;padding:13px;border-radius:11px;margin-bottom:8px}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.q{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand">Test<span>Pro</span></div></header>
+<main>
+<section id="home">
+<div class="hero"><h1>DTM & BBA testlariga tayyorlaning</h1><p>iPhone uchun test ishlash ilovasining 1-versiyasi.</p></div>
+<div class="grid">
+<div class="card tile" onclick="setup()"><div class="icon">🎯</div><h3>Test ishlash</h3><div class="muted">Fan, yil va savollar sonini tanlang</div></div>
+<div class="card tile" onclick="alert('Xato savollar testi keyingi versiyada kengaytiriladi.')"><div class="icon">❌</div><h3>Xatolarim</h3><div class="muted">Xato javoblarni qayta ishlash</div></div>
+<div class="card tile" onclick="alert('Natijalar shu telefon brauzerida saqlanadi.')"><div class="icon">📊</div><h3>Natijalar</h3><div class="muted">Natijalarni kuzatish</div></div>
+<div class="card tile" onclick="alert('Haqiqiy DTM/BBA bazasi qonuniy manba orqali ulanadi.')"><div class="icon">🔎</div><h3>Qidirish</h3><div class="muted">Savol va mavzu bo‘yicha qidirish</div></div>
+</div>
+</section>
+
+<section id="setup" class="hidden">
+<div class="card"><h2>Testni sozlash</h2>
+<label>Manba</label><select id="source"><option>DTM / BBA</option></select>
+<label>Yil</label><select id="year"><option>2026</option><option>2025</option><option>2024</option><option>2023</option></select>
+<label>Fan</label><select id="subject"><option>Matematika</option><option>O‘zbekiston tarixi</option><option>Ona tili</option><option>Ingliz tili</option><option>Huquq</option><option>Fizika</option><option>Biologiya</option><option>Kimyo</option></select>
+<label>Savollar soni</label><select id="count"><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="60">60</option><option value="90">90</option></select>
+<button class="btn" onclick="start()">Testni boshlash</button>
+</div>
+<button class="btn secondary" onclick="home()">← Bosh sahifa</button>
+</section>
+
+<section id="quiz" class="hidden">
+<div class="top"><span class="badge" id="num"></span><span class="timer" id="timer">60:00</span></div>
+<div class="bar"><div class="fill" id="fill"></div></div>
+<div class="card"><h2 class="q" id="q"></h2><div class="ans" id="ans"></div></div>
+<div class="nav"><button class="btn secondary" onclick="prev()">← Oldingi</button><button class="btn" onclick="next()" id="next">Keyingi →</button></div>
+</section>
+
+<section id="result" class="hidden">
+<div class="card result"><h2>Test yakunlandi 🎉</h2><div class="score" id="score"></div><p id="summary"></p></div>
+<div class="card"><h3>Xatolar</h3><div id="mistakes"></div></div>
+<button class="btn" onclick="home()">Bosh sahifa</button>
+</section>
+</main>
+</div>
+<script>
+const bank=[
+{q:"2x + 6 = 14 tenglamaning yechimi qaysi?",a:["A) 2","B) 4","C) 6","D) 8"],c:1},
+{q:"5² + 3² nechaga teng?",a:["A) 28","B) 30","C) 34","D) 36"],c:2},
+{q:"120 ning 25 foizi nechaga teng?",a:["A) 20","B) 25","C) 30","D) 35"],c:2},
+{q:"x² = 49 bo‘lsa, musbat x nechaga teng?",a:["A) 5","B) 6","C) 7","D) 8"],c:2},
+{q:"3/4 + 1/4 nechaga teng?",a:["A) 1/2","B) 1","C) 3/4","D) 2"],c:1},
+{q:"18 va 24 sonlarining EKUBi nechaga teng?",a:["A) 3","B) 6","C) 9","D) 12"],c:1},
+{q:"200 ning 15 foizi?",a:["A) 20","B) 25","C) 30","D) 35"],c:2},
+{q:"Agar a=3 bo‘lsa, 2a²+1 qiymati?",a:["A) 7","B) 13","C) 18","D) 19"],c:1}
+];
+let qs=[], answers=[], pos=0, seconds=3600, timer;
+function show(id){["home","setup","quiz","result"].forEach(x=>document.getElementById(x).classList.add("hidden"));document.getElementById(id).classList.remove("hidden")}
+function home(){clearInterval(timer);show("home")}
+function setup(){show("setup")}
+function start(){let n=+document.getElementById("count").value;qs=Array.from({length:n},(_,i)=>bank[i%bank.length]);answers=Array(n).fill(null);pos=0;seconds=3600;show("quiz");render();clearInterval(timer);timer=setInterval(()=>{seconds--;clock();if(seconds<=0)finish()},1000)}
+function clock(){let m=String(Math.floor(seconds/60)).padStart(2,"0"),s=String(seconds%60).padStart(2,"0");document.getElementById("timer").textContent=m+":"+s}
+function render(){let x=qs[pos];document.getElementById("num").textContent=`Savol ${pos+1} / ${qs.length}`;document.getElementById("fill").style.width=((pos+1)/qs.length*100)+"%";document.getElementById("q").textContent=x.q;document.getElementById("ans").innerHTML=x.a.map((v,j)=>`<button class="${answers[pos]===j?"sel":""}" onclick="pick(${j})">${v}</button>`).join("");document.getElementById("next").textContent=pos===qs.length-1?"Yakunlash":"Keyingi →"}
+function pick(j){answers[pos]=j;render()}
+function next(){if(answers[pos]===null){alert("Avval javobni tanlang.");return}if(pos<qs.length-1){pos++;render()}else finish()}
+function prev(){if(pos>0){pos--;render()}}
+function finish(){clearInterval(timer);let correct=answers.reduce((s,x,i)=>s+(x===qs[i].c?1:0),0);let pct=Math.round(correct/qs.length*100);show("result");document.getElementById("score").textContent=correct+" / "+qs.length;document.getElementById("summary").textContent=`To‘g‘ri javoblar: ${correct}. Foiz: ${pct}%.`;let bad=qs.map((x,i)=>({x,i})).filter(o=>answers[o.i]!==o.x.c);document.getElementById("mistakes").innerHTML=bad.length?bad.map(o=>`<button class="review" onclick="alert('${o.x.q.replace(/'/g,"\\'")}\\nTo‘g‘ri javob: ${o.x.a[o.x.c].replace(/'/g,"\\'")}')">❌ ${o.i+1}-savol — to‘g‘ri javob: ${o.x.a[o.x.c]}</button>`).join(""):"Hammasi to‘g‘ri! 🎉"}
+</script>
+</body>
+</html>
